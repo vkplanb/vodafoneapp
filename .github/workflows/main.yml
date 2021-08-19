@@ -6,16 +6,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Print a Build Statement
-        run: |
-          echo "Welcome to Build Step"
-          echo "Build is going on"
-
+      - name: Create a build-output file
+        run: echo "Build Job" > build-output.txt
+      
+      - name: Pass the file to the next job
+        uses: actions/upload-artifact@v2
+        with:
+          name: buildoutputfile
+          path: build-output.txt
+        if: always()
 
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    needs: build
     steps:
-      - name: Print a test Statement
-        run: |
-          echo "Welcome to Test Step"
-          echo "Testing is going on"
+      - name: download the file from previous job
+        uses: actions/download-artifact@v2
+        with:
+          name: buildoutputfile
+
+      - name: Check weather file is created or not.
+        run: cat build-output.txt
