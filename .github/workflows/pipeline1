@@ -1,0 +1,29 @@
+name: DevSecOps Workflow
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create a build-output file
+        run: echo "Build Job" > build-output.txt
+      
+      - name: Pass the file to the next job
+        uses: actions/upload-artifact@v2
+        with:
+          name: buildoutputfile
+          path: build-output.txt
+        if: always()
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: download the file from previous job
+        uses: actions/download-artifact@v2
+        with:
+          name: buildoutputfile
+
+      - name: Check weather file is created or not.
+        run: cat build-output.txt
