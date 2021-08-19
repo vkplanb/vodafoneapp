@@ -1,0 +1,21 @@
+name: DevSecOps Workflow
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print a Build Statement
+        run: |
+          echo "Welcome to Build Step"
+          echo "Build is going on"
+
+
+  test:
+    runs-on: windows-latest
+    steps:
+      - name: Print a test Statement
+        run: |
+          echo "Welcome to Test Step"
+          echo "Testing is going on"
